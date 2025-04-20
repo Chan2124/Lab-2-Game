@@ -1,0 +1,6 @@
+- Double Check the design
+- Double check the game logic
+- Double check all the buttons including sound, home, restart, pause, resume and timer
+- Double check the leaderboard
+- Enhance UI pa sana
+- After that lipat mo na sa cp mo para di tambak

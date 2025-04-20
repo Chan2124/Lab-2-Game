@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pop Match Game — Hard Mode</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+  .phone {
+    display: none;
+  }
+
+  .desktop-warning {
+    display: block;
+  }
+
+  body {
+    background: #fffae6;
+  }
+}
+
+/* Tweak .phone styling for true mobile look */
+.phone {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: url('Lab 2.png') center/cover no-repeat;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+    .logo {
+      margin-top: 30px;
+      font-size: 36px;
+      font-weight: bold;
+      color: #fff700;
+      text-align: center;
+      text-shadow: 2px 2px #ff0000, 4px 4px #00ff00, 6px 6px #000;
+      letter-spacing: 2px;
+      line-height: 1.2;
+      background: linear-gradient(45deg, #ff0, #ff5c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-around;
+      width: 80%;
+      margin: 12px 0;
+    }
+
+    .controls button {
+      background-color: #ffd966;
+      color: #5a0000;
+      border: none;
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-size: 1.1em;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .game-container {
+      width: 90%;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      color: white;
+      position: relative; /* for popup centering */
+    }
+
+    .scoreboard, .timer, .bestscore {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin: 6px 0;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 12px;
+      width: 100%;
+      aspect-ratio: 3/4;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.35s ease-in-out, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .card:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+    .card:active { transform: scale(0.95); }
+    .card.flipped { transform: rotateY(180deg); }
+
+    .card .front, .card .back {
+      position: absolute; width: 100%; height: 100%;
+      backface-visibility: hidden; border-radius: 10px;
+    }
+    .card .front {
+      background-color: #ff4a4a;
+      display: flex; justify-content: center; align-items: center;
+      font-size: 2em; color: white; font-weight: bold;
+    }
+    .card .back {
+      background-size: cover; background-position: center;
+      transform: rotateY(180deg);
+    }
+
+    .popup {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2em; font-weight: bold; color: #fff;
+      background: rgba(0,0,0,0.7); padding: 10px 20px;
+      border-radius: 12px; z-index: 10; display: none;
+      animation: pop 1s ease-out forwards;
+    }
+    @keyframes pop {
+      0% { transform: translate(-50%,-50%) scale(0.5); opacity:0; }
+      50% { transform: translate(-50%,-50%) scale(1.2); opacity:1; }
+      100% { transform: translate(-50%,-50%) scale(1); opacity:0; }
+    }
+
+    .paused-overlay, .win-overlay, .lose-overlay {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none; flex-direction: column;
+      justify-content: center; align-items: center;
+      color: white; font-size: 2em; font-weight: bold;
+      z-index: 20;
+    }
+    .paused-overlay button,
+    .win-overlay button,
+    .lose-overlay button {
+      margin-top: 12px; padding: 8px 16px;
+      font-size: 1em; border-radius: 10px; border: none;
+      background-color: #ffd966; color: #5a0000;
+      cursor: pointer; box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+    .win-overlay .win-content,
+    .lose-overlay .lose-content { text-align: center; }
+    .win-overlay .win-message,
+    .lose-overlay .lose-message { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="logo">Pop Match</div>
+    <div class="controls">
+      <button id="toggleSound">🔊</button>
+      <button id="pauseBtn">⏸️</button>
+      <button id="resetBtn">🔁</button>
+    </div>
+    <div class="game-container">
+      <div class="scoreboard" id="scoreboard">Score: 0</div>
+      <div class="bestscore" id="bestScore">Best: 0</div>
+      <div class="timer" id="timer">02:00</div>
+      <div class="game-board" id="gameBoard"></div>
+      <div class="popup" id="popup"></div>
+    </div>
+
+    <div class="paused-overlay" id="pauseOverlay">
+      Game Paused
+      <button id="resumeBtn">▶️ Resume</button>
+      <button id="homePauseBtn">🏠 Home</button>
+    </div>
+
+    <div class="win-overlay" id="winOverlay">
+      <div class="win-content">
+        <div class="win-message">🎉 You Win! 🎉</div>
+        <button id="homeWinBtn">🏠 Home</button>
+      </div>
+    </div>
+
+    <div class="lose-overlay" id="loseOverlay">
+      <div class="lose-content">
+        <div class="lose-message">⏰ Time's Up!</div>
+        <button id="retryBtn">🔁 Restart</button>
+        <button id="homeLoseBtn">🏠 Home</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const imageURLs = [
+      "https://i.pinimg.com/736x/fe/c4/5b/fec45b6f9fb51ed057fdb6056d10901e.jpg",
+      "https://i.pinimg.com/736x/c1/61/fe/c161fecb57c6e24f5ff7fbcf536152cc.jpg",
+      "https://i.pinimg.com/736x/2e/87/89/2e8789499b32a956d1059e7c63044a1b.jpg",
+      "https://i.pinimg.com/736x/ac/3c/a2/ac3ca233628cbd1e831c7a0635a96923.jpg",
+      "https://i.pinimg.com/736x/f6/a8/66/f6a866e62474cb1f62db7ffe2f90d024.jpg",
+      "https://i.pinimg.com/736x/06/bc/bd/06bcbd62c790c4ca25348d1c834e2c52.jpg",
+      "https://i.pinimg.com/736x/aa/74/fc/aa74fc1a2a59e40c68adfb771e06aed3.jpg",
+      "https://i.pinimg.com/736x/37/c7/6d/37c76df7543386bbc825117d21343cdd.jpg"
+    ];
+    const flipSound   = new Audio("https://www.soundjay.com/button/beep-07.wav");
+    const matchSound  = new Audio("https://www.soundjay.com/button/button-16.mp3");
+    const bgMusic     = new Audio("Maki.mp3");
+    bgMusic.loop = true; bgMusic.volume = 0.3;
+
+    const gameBoard     = document.getElementById('gameBoard');
+    const timerElement  = document.getElementById('timer');
+    const scoreboard    = document.getElementById('scoreboard');
+    const bestScoreDisp = document.getElementById('bestScore');
+    const popup         = document.getElementById('popup');
+    const pauseOverlay  = document.getElementById('pauseOverlay');
+    const winOverlay    = document.getElementById('winOverlay');
+    const loseOverlay   = document.getElementById('loseOverlay');
+    const toggleSound   = document.getElementById('toggleSound');
+    const pauseBtn      = document.getElementById('pauseBtn');
+    const resetBtn      = document.getElementById('resetBtn');
+    const resumeBtn     = document.getElementById('resumeBtn');
+    const homePauseBtn  = document.getElementById('homePauseBtn');
+    const homeWinBtn    = document.getElementById('homeWinBtn');
+    const retryBtn      = document.getElementById('retryBtn');
+    const homeLoseBtn   = document.getElementById('homeLoseBtn');
+
+    let flippedCards = [], matchedPairs = 0, totalPairs = 0;
+    let score = 0, bestScore = 0;
+    let lockBoard = false, paused = false;
+    let timeLeft = 120, timerInterval;
+
+    function updateTimer() {
+      if (!paused) {
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        timerElement.textContent =
+          `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          lockBoard = true;
+          timeoutOverlay.style.display = 'flex';
+          setTimeout(() => {
+            window.location.href = "HardModeLeaderboard.html";
+          }, 2000); // optional delay to show "Time's Up!" message
+
+        } else {
+          timeLeft--;
+        }
+      }
+    }
+
+    function popupMessage(msg) {
+      popup.textContent = msg;
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 1000);
+    }
+
+    function resetGame() {
+      clearInterval(timerInterval);
+      gameBoard.innerHTML = '';
+      flippedCards = [];
+      matchedPairs = 0;
+      score = 0;
+      lockBoard = false;
+      paused = false;
+      pauseOverlay.style.display = 'none';
+      winOverlay.style.display = 'none';
+      loseOverlay.style.display = 'none';
+      timeLeft = 120;
+      scoreboard.textContent = `Score: 0`;
+      setupGame();
+    }
+
+    function setupGame() {
+      totalPairs = imageURLs.length;
+      bestScore = Math.max(bestScore, +localStorage.getItem("bestScore") || 0);
+      bestScoreDisp.textContent = `Best: ${bestScore}`;
+
+      // build deck of exactly two of each URL
+      const deck = [...imageURLs, ...imageURLs].sort(() => 0.5 - Math.random());
+      deck.forEach(url => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.card = url;
+
+        const front = document.createElement('div');
+        front.classList.add('front');
+        front.textContent = 'P';
+
+        const back = document.createElement('div');
+        back.classList.add('back');
+        back.style.backgroundImage = `url('${url}')`;
+
+        card.append(front, back);
+        card.addEventListener('click', () => flipCard(card));
+        gameBoard.append(card);
+      });
+
+      timerInterval = setInterval(updateTimer, 1000);
+      if (localStorage.getItem("backgroundMusic") === "enabled") {
+        bgMusic.play().catch(e => console.log("Autoplay blocked:", e));
+        toggleSound.textContent = '🔊';
+      } else {
+        bgMusic.pause();
+        toggleSound.textContent = '🔇';
+      }
+    }
+
+    function flipCard(card) {
+      if (lockBoard || paused || card.classList.contains('flipped')) return;
+      flipSound.play();
+      card.classList.add('flipped');
+      flippedCards.push(card);
+      if (flippedCards.length === 2) {
+        lockBoard = true;
+        setTimeout(checkMatch, 800);
+      }
+    }
+
+    function checkMatch() {
+  const [c1, c2] = flippedCards;
+  if (c1.dataset.card === c2.dataset.card) {
+    matchedPairs++;
+    score += 100;
+    scoreboard.textContent = `Score: ${score}`;
+    matchSound.play();
+    popupMessage("MATCH!");
+    if (matchedPairs === imageURLs.length) {
+      clearInterval(timerInterval);
+      localStorage.setItem("bestScore", Math.max(score, bestScore));
+      setTimeout(() => {
+        winOverlay.style.display = 'flex';
+        window.location.href = "HardModeLeaderboard.html";
+      }, 500);
+
+    }
+    flippedCards = [];
+    lockBoard = false;
+  } else {
+    popupMessage("MISS!");
+    setTimeout(() => {
+      c1.classList.remove('flipped');
+      c2.classList.remove('flipped');
+      flippedCards = [];
+      lockBoard = false;
+    }, 600);
+  }
+}
+
+
+    // button handlers
+    toggleSound.onclick = () => {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        toggleSound.textContent = '🔊';
+        localStorage.setItem("backgroundMusic", "enabled");
+      } else {
+        bgMusic.pause();
+        toggleSound.textContent = '🔇';
+        localStorage.setItem("backgroundMusic", "disabled");
+      }
+    };
+
+    pauseBtn.onclick      = () => { paused = true;  pauseOverlay.style.display = 'flex'; lockBoard = true; };
+    resumeBtn.onclick     = () => { paused = false; pauseOverlay.style.display = 'none'; lockBoard = false; };
+    homePauseBtn.onclick  = () => { location.href = 'Menu.html'; };
+    resetBtn.onclick      = resetGame;
+    homeWinBtn.onclick    = () => { location.href = 'Menu.html'; };
+    retryBtn.onclick      = resetGame;
+    homeLoseBtn.onclick   = () => { location.href = 'Menu.html'; };
+
+    // start game
+    resetGame();
+  </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Leaderboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+  .phone {
+    display: none;
+  }
+
+  .desktop-warning {
+    display: block;
+  }
+
+  body {
+    background: #fffae6;
+  }
+}
+
+/* Tweak .phone styling for true mobile look */
+.phone {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: url('Lab 2.png') center/cover no-repeat;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+    .logo {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffd966;
+      text-shadow: 2px 2px 0 #5a0000;
+    }
+
+    .leaderboard-container {
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      overflow-y: auto;
+      max-height: 400px;
+    }
+
+    .leaderboard {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .leaderboard th, .leaderboard td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .leaderboard th {
+      background-color: #ffd966;
+      color: #5a0000;
+      font-weight: bold;
+    }
+
+    .leaderboard td {
+      text-align: center;
+      color: white;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #ffd966;
+      color: #5a0000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px #aa4400;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background-color: #ffeb99;
+    }
+
+    .back-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #ffd966;
+      color: #5a0000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px #aa4400;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.05);
+      background-color: #ffeb99;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+    <div class="logo">🔴 Difficult Mode Leaderboard</div>
+
+    <div class="leaderboard-container">
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+          <!-- Dynamic rows will be added here -->
+        </tbody>
+      </table>
+      <button onclick="addPlayer()">➕ Add Player</button>
+    </div>
+
+    <div style="margin-top: auto; margin-bottom: 10px;">
+      <a href="landingpage.html"><button class="back-btn">Back</button></a>
+    </div>
+  </div>
+
+  <script>
+    // Sample leaderboard data
+    let leaderboardData = [
+      { player: "Lance", score: 800 },
+      { player: "Floyd", score: 700 },
+      { player: "Railey", score: 600 }
+    ];
+
+    // Load leaderboard
+    function loadLeaderboard() {
+      const leaderboardBody = document.getElementById("leaderboard-body");
+      leaderboardBody.innerHTML = ""; // Clear existing rows
+
+      // Sort data by score (descending)
+      leaderboardData.sort((a, b) => b.score - a.score);
+
+      leaderboardData.forEach((entry, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${entry.player}</td>
+          <td>${entry.score}</td>
+        `;
+        leaderboardBody.appendChild(row);
+      });
+    }
+
+    // Add new player
+    function addPlayer() {
+      const playerName = prompt("Enter player name:");
+      const playerScore = parseInt(prompt("Enter player score:"), 10);
+
+      if (playerName && !isNaN(playerScore)) {
+    if (playerScore <= 9--) {
+      leaderboardData.push({ player: playerName, score: playerScore });
+      localStorage.setItem("easyModeLeaderboard", JSON.stringify(leaderboardData)); // Save to localStorage
+      loadLeaderboard(); // Refresh leaderboard
+    } else {
+      alert("Score must not exceed 800. Please try again!");
+    }
+  } else {
+    alert("Invalid input. Please try again!");
+  }
+}
+
+    // Load saved leaderboard data from localStorage (if available)
+    window.onload = () => {
+        const savedData = localStorage.getItem("difficultModeLeaderboard");
+      if (savedData) {
+        leaderboardData = JSON.parse(savedData);
+      }
+      loadLeaderboard();
+    };
+  </script>
+
+</body>
+</html>

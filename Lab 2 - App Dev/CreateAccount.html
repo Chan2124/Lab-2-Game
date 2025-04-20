@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pop Match - Create Account</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+  .phone {
+    display: none;
+  }
+
+  .desktop-warning {
+    display: block;
+  }
+
+  body {
+    background: #fffae6;
+  }
+}
+
+/* Tweak .phone styling for true mobile look */
+.phone {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: url('Lab 2.png') center/cover no-repeat;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+    .logo {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 48px;
+      font-weight: bold;
+      color: #fff700;
+      text-shadow:
+        2px 2px #ff0000,
+        4px 4px #00ff00,
+        6px 6px #000000;
+      letter-spacing: 2px;
+      line-height: 1.2;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(45deg, #ff0, #ff5c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo span {
+      color: limegreen;
+      text-shadow: 2px 2px #004d00;
+      -webkit-text-fill-color: unset;
+    }
+
+    .container {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      width: 80%;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .input-field {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0; /* Only vertical margin */
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-sizing: border-box; /* Ensures padding stays within 100% width */
+}
+
+
+    .signup-btn {
+      background-color: #ffcc66;
+      color: #5a0000;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 12px;
+      width: 100%;
+      box-shadow: 3px 3px 6px #996633;
+      transition: all 0.3s ease;
+    }
+
+    .signup-btn:hover {
+      background-color: #ffdd99;
+      transform: scale(1.08);
+    }
+
+    .back-link {
+      margin-top: 15px;
+      font-size: 14px;
+      color: white;
+    }
+
+    .back-link a {
+      color: rgb(255, 50, 50);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-link a:hover {
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .social-login {
+      margin-top: 15px;
+    }
+
+    .social-btn {
+      display: inline-block;
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 2px 2px 5px #aa4400;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .google-btn {
+      background-color: #db4437;
+      color: white;
+    }
+
+    .facebook-btn {
+      background-color: #3b5998;
+      color: white;
+    }
+
+    .play-btn {
+      background-color: #ffcc66;
+      color: #5a0000;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 3px 3px 6px #996633;
+      transition: all 0.3s ease;
+    }
+
+    .play-btn:hover {
+      background-color: #ffdd99;
+      transform: scale(1.08);
+    }
+  </style>
+  <script type="module" src="LoginSignup.js">
+  </script>
+</head>
+<body>
+
+  <div class="phone">
+
+    <div class="logo">Pop<br><span>Match</span></div>
+
+    <div class="container">
+      <input class="input-field" type="email" placeholder="Email" id="email"/>
+      <input class="input-field" type="password" placeholder="Password" id="password"/>
+      <div class="back-link">
+        Already have an account? <a href="Login.html">Login</a>
+      </div>
+      <a href="landingpage(new).html">
+        <button class="signup-btn" id="submit">CREATE ACCOUNT</button>
+      </a>
+      <br>
+      <br>
+    
+      
+      <a href="landingpage.html">
+        <button class="play-btn">🔙 Back</button>
+      </a>
+    
+    </div>
+
+
+  </div>
+
+</body>
+</html>

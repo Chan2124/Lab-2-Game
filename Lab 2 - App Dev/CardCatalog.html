@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Catalog – Interactive</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+  .phone {
+    display: none;
+  }
+
+  .desktop-warning {
+    display: block;
+  }
+
+  body {
+    background: #fffae6;
+  }
+}
+
+/* Tweak .phone styling for true mobile look */
+.phone {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: url('Lab 2.png') center/cover no-repeat;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+    .logo {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 38px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 3px 3px 0 #ff0, 5px 5px 0 #0f0;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* left-align all cards */
+      overflow: hidden;
+    }
+
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      width: max-content;
+    }
+
+    .card {
+      width: 150px;
+      height: 200px;
+      margin: 10px;
+      border-radius: 12px;
+      box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 0.8s;
+    }
+
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+    }
+
+    .card-front {
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card-back {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transform: rotateY(180deg);
+    }
+
+    .arrow {
+      position: absolute;
+      font-size: 30px;
+      cursor: pointer;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    .left-arrow { left: 10px; }
+    .right-arrow { right: 10px; }
+
+    .container {
+      position: absolute;
+      bottom: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      width: 85%;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .play-btn {
+      background-color: #ffd966;
+      color: #5a0000;
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 8px 0;
+      width: 100%;
+      box-shadow: 2px 2px 5px #aa4400;
+      transition: all 0.3s ease;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.08);
+      background-color: #ffeb99;
+    }
+
+    .card-front::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover .card-front::before {
+  animation: shine 1s ease forwards;
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+    <div class="logo">Card<br><span style="color: limegreen">Catalog</span></div>
+
+    <div class="slider-container">
+      <span class="arrow left-arrow" onclick="prevSlide()">◀</span>
+      <div class="slider" id="cardSlider"></div>
+      <span class="arrow right-arrow" onclick="nextSlide()">▶</span>
+    </div>
+
+    <div class="container">
+      <a href="landingpage.html"><button class="play-btn"> Back</button></a>
+    </div>
+  </div>
+
+  <script>
+const cards = [
+  { image: "https://i.pinimg.com/736x/8f/9d/86/8f9d867119df64d0b52887abd850decf.jpg", info: "Card 1: Beautiful Scenery" },
+  { image: "https://i.pinimg.com/736x/32/c0/dc/32c0dce649b90573cf736aa9a2c68ac4.jpg", info: "Card 2: Breathtaking View" },
+  { image: "https://i.pinimg.com/736x/05/23/db/0523dbd791e61091c0b9efac439fb3b1.jpg", info: "Card 3: Stunning Art" },
+  { image: "https://i.pinimg.com/736x/eb/84/12/eb8412f147808eba6be020b8e5ae9479.jpg", info: "Card 4: Dreamy Landscape" },
+  { image: "https://i.pinimg.com/736x/bb/69/5a/bb695a69fd6405212ca62aa55880a734.jpg", info: "Card 5: Urban Charm" },
+  { image: "https://i.pinimg.com/736x/1c/17/6a/1c176ad6bc3044b948ab2bf4eb3f4b44.jpg", info: "Card 6: Abstract Beauty" },
+  { image: "https://i.pinimg.com/736x/06/eb/77/06eb77347f3ecfe982ae913b12879b30.jpg", info: "Card 7: Bold Colors" },
+  { image: "https://i.pinimg.com/736x/90/8e/56/908e56ae836c4e89efc4bfe71223d14c.jpg", info: "Card 8: Minimalist Design" },
+  { image: "https://i.pinimg.com/736x/7f/f9/1a/7ff91af776974382e28810d85a833996.jpg", info: "Card 9: Vibrant Patterns" },
+  { image: "https://i.pinimg.com/736x/3c/ff/00/3cff0048729479fd336826c363cfd398.jpg", info: "Card 10: Forest Fantasy" },
+  { image: "https://i.pinimg.com/736x/e4/08/f0/e408f0bbdc168896239e6b2bee27360a.jpg", info: "Card 11: Nature's Glow" },
+  { image: "https://i.pinimg.com/736x/40/04/e6/4004e6717dfa8e04c55b84d323aa764c.jpg", info: "Card 12: Elegant Design" },
+  { image: "https://i.pinimg.com/736x/fe/c4/5b/fec45b6f9fb51ed057fdb6056d10901e.jpg", info: "Card 13: Vintage Style" },
+  { image: "https://i.pinimg.com/736x/c1/61/fe/c161fecb57c6e24f5ff7fbcf536152cc.jpg", info: "Card 14: Classic Charm" },
+  { image: "https://i.pinimg.com/736x/2e/87/89/2e8789499b32a956d1059e7c63044a1b.jpg", info: "Card 15: Sunset Serenity" },
+  { image: "https://i.pinimg.com/736x/ac/3c/a2/ac3ca233628cbd1e831c7a0635a96923.jpg", info: "Card 16: Majestic Mountains" },
+  { image: "https://i.pinimg.com/736x/f6/a8/66/f6a866e62474cb1f62db7ffe2f90d024.jpg", info: "Card 17: Mystical Beauty" },
+  { image: "https://i.pinimg.com/736x/06/bc/bd/06bcbd62c790c4ca25348d1c834e2c52.jpg", info: "Card 18: Bold Landscapes" },
+  { image: "https://i.pinimg.com/736x/aa/74/fc/aa74fc1a2a59e40c68adfb771e06aed3.jpg", info: "Card 19: Inspiring Wonder" },
+  { image: "https://i.pinimg.com/736x/37/c7/6d/37c76df7543386bbc825117d21343cdd.jpg", info: "Card 20: Soft Pastels" },
+  { image: "https://i.pinimg.com/736x/ec/bd/11/ecbd11d17ef9c46be33fdae5db74cf0c.jpg", info: "Card 21: Vibrant Colors" },
+  { image: "https://i.pinimg.com/736x/2c/64/4b/2c644b318bf3d8b4217c21ef2971ffcd.jpg", info: "Card 22: Dramatic Designs" },
+  { image: "https://i.pinimg.com/736x/38/c5/87/38c587f9de0a746e98ae1e0c0e495e5d.jpg", info: "Card 23: Whimsical Patterns" },
+  { image: "https://i.pinimg.com/736x/97/65/2a/97652aa17b3ad692f81260460d6758d4.jpg", info: "Card 24: Tranquil Beauty" },
+  { image: "https://i.pinimg.com/736x/c6/4f/6a/c64f6a8d0456a54bc1298f05d1b73fa5.jpg", info: "Card 25: Lush Scenery" },
+  { image: "https://i.pinimg.com/736x/ca/c9/b0/cac9b0766aa38c90264a28f455beabbf.jpg", info: "Card 26: Colorful Imagination" },
+  { image: "https://i.pinimg.com/736x/bf/32/a0/bf32a0ae0b12e4925575f4cbaafa3c06.jpg", info: "Card 27: Bold Horizons" },
+  { image: "https://i.pinimg.com/736x/d3/33/a5/d333a55d4f3e93b99e1e3d57a50976c1.jpg", info: "Card 28: Captivating Shades" }
+];
+
+let currentIndex = 0;
+
+function loadCards() {
+  const slider = document.getElementById("cardSlider");
+  slider.innerHTML = "";
+
+  cards.forEach(({ image, info }) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-front" style="background-image: url('${image}')"></div>
+        <div class="card-back">${info}</div>
+      </div>`;
+    slider.appendChild(card);
+  });
+
+  // compute full slider width
+  const firstCard = slider.querySelector('.card');
+  const style     = getComputedStyle(firstCard);
+  const w         = firstCard.getBoundingClientRect().width;
+  const mL        = parseFloat(style.marginLeft);
+  const mR        = parseFloat(style.marginRight);
+  const perCard   = w + mL + mR;
+  slider.style.width = `${cards.length * perCard}px`;
+
+  updateSlider();
+}
+
+function updateSlider() {
+  const slider = document.getElementById("cardSlider");
+  const card   = slider.querySelector('.card');
+  const style  = getComputedStyle(card);
+  const w      = card.getBoundingClientRect().width;
+  const mL     = parseFloat(style.marginLeft);
+  const mR     = parseFloat(style.marginRight);
+  const offset = w + mL + mR;
+  slider.style.transform = `translateX(-${currentIndex * offset}px)`;
+}
+
+function prevSlide() {
+  currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+  updateSlider();
+}
+
+function nextSlide() {
+  currentIndex = (currentIndex + 1) % cards.length;
+  updateSlider();
+}
+
+window.addEventListener('load', loadCards);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Memory Match</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffe4ec, #ffc6e2);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: backgroundMove 10s infinite alternate;
+    }
+
+    @keyframes backgroundMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .game-container {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      width: 95vw;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #ff1493;
+      margin-bottom: 10px;
+      animation: popIn 1s ease-out;
+      text-shadow: 2px 2px #ffc1de;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+      padding: 10px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 12px;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.35s ease-in-out;
+      will-change: transform;
+      cursor: pointer;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card .front,
+    .card .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card .front {
+      background-color: #ff69b4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.5em;
+      color: white;
+      font-weight: bold;
+    }
+
+    .card .back {
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      transform: rotateY(180deg);
+    }
+
+    .timer {
+      font-size: 1.5em;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #ff1493;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 1.2em;
+      color: #c71585;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>Memory Match</h1>
+    <div class="timer" id="timer">03:00</div>
+    <div class="game-board" id="gameBoard"></div>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const imageURLs = [
+      "https://i.pinimg.com/736x/8f/9d/86/8f9d867119df64d0b52887abd850decf.jpg",
+      "https://i.pinimg.com/736x/32/c0/dc/32c0dce649b90573cf736aa9a2c68ac4.jpg",
+      "https://i.pinimg.com/736x/05/23/db/0523dbd791e61091c0b9efac439fb3b1.jpg",
+      "https://i.pinimg.com/736x/eb/84/12/eb8412f147808eba6be020b8e5ae9479.jpg",
+      "https://i.pinimg.com/736x/06/eb/53/06eb5349b0b1659a0d1edd6d6f643f18.jpg",
+      "https://i.pinimg.com/736x/40/04/e6/4004e6717dfa8e04c55b84d323aa764c.jpg",
+      "https://i.pinimg.com/736x/bb/69/5a/bb695a69fd6405212ca62aa55880a734.jpg",
+      "https://i.pinimg.com/736x/1c/17/6a/1c176ad6bc3044b948ab2bf4eb3f4b44.jpg"
+    ];
+
+    // Preload images
+    imageURLs.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const gameBoard = document.getElementById('gameBoard');
+      const message = document.getElementById('message');
+      const timerElement = document.getElementById('timer');
+      const totalPairs = 8;
+      let cards = [];
+      let flippedCards = [];
+      let matchedPairs = 0;
+      let lockBoard = false;
+      let timeLeft = 180;
+
+      function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        if (timeLeft === 0) {
+          message.textContent = "Time's up! You lost!";
+          gameOver();
+        } else {
+          timeLeft--;
+        }
+      }
+
+      const timerInterval = setInterval(updateTimer, 1000);
+
+      // Setup cards
+      imageURLs.forEach((url, index) => {
+        cards.push({ id: index, url });
+        cards.push({ id: index, url }); // Duplicate for pairs
+      });
+
+      cards.sort(() => 0.5 - Math.random()); // Shuffle
+
+      cards.forEach(({ url }) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.card = url;
+
+        const front = document.createElement('div');
+        front.classList.add('front');
+        front.textContent = '?';
+
+        const back = document.createElement('div');
+        back.classList.add('back');
+        back.style.backgroundImage = `url('${url}')`;
+
+        card.appendChild(front);
+        card.appendChild(back);
+        gameBoard.appendChild(card);
+
+        card.addEventListener('click', flipCard);
+      });
+
+      function flipCard() {
+        if (lockBoard || this.classList.contains('flipped')) return;
+
+        this.classList.add('flipped');
+        flippedCards.push(this);
+
+        if (flippedCards.length === 2) {
+          lockBoard = true;
+          setTimeout(checkMatch, 700);
+        }
+      }
+
+      function checkMatch() {
+        const [card1, card2] = flippedCards;
+
+        if (card1.dataset.card === card2.dataset.card) {
+          matchedPairs++;
+          flippedCards = [];
+          lockBoard = false;
+          if (matchedPairs === totalPairs) {
+            message.textContent = "You win! 🎉";
+            clearInterval(timerInterval);
+            gameOver();
+          }
+        } else {
+          setTimeout(() => {
+            card1.classList.remove('flipped');
+            card2.classList.remove('flipped');
+            flippedCards = [];
+            lockBoard = false;
+          }, 500);
+        }
+      }
+
+      function gameOver() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => card.removeEventListener('click', flipCard));
+      }
+    });
+  </script>
+</body>
+</html>

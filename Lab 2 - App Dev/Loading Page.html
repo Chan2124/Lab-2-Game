@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pop Match - Loading</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .phone {
+      width: 360px;
+      height: 640px;
+      border: 16px solid #333;
+      border-radius: 30px;
+      background: url('Lab 2.png') center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 48px;
+      font-weight: bold;
+      color: #fff700;
+      text-shadow:
+        2px 2px #ff0000,
+        4px 4px #00ff00,
+        6px 6px #000000;
+      letter-spacing: 2px;
+      line-height: 1.2;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(45deg, #ff0, #ff5c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo span {
+      color: limegreen;
+      text-shadow: 2px 2px #004d00;
+      -webkit-text-fill-color: unset;
+    }
+
+    .loader {
+      margin: 30px auto;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border-top: 8px solid #ffd966;
+      border-right: 8px solid #ff4b2b;
+      border-bottom: 8px solid #f6194d;
+      border-left: 8px solid #00ff00;
+      animation: spin 1.2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 20px;
+      color: white;
+      margin-top: 10px;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .continue-link {
+      margin-top: 20px;
+      background-color: #ffd966;
+      color: #5a0000;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px #aa4400;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .continue-link:hover {
+      background-color: #ffeb99;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="logo">Pop<br><span>Match</span></div>
+    <div class="loader"></div>
+    <div class="loading-text">Matching your vibe...</div>
+    <a href="Menu.html" class="continue-link" onclick="alert('Pop in, Piecker!')">Tap to Continue</a>
+  </div>
+</body>
+</html>

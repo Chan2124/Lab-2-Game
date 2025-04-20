@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pop Match</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+  .phone {
+    display: none;
+  }
+
+  .desktop-warning {
+    display: block;
+  }
+
+  body {
+    background: #fffae6;
+  }
+}
+
+/* Tweak .phone styling for true mobile look */
+.phone {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: url('Lab 2.png') center/cover no-repeat;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+    .logo {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 40px;
+      font-weight: bold;
+      color: #ff0;
+      text-shadow: 2px 2px 0 #f00, 4px 4px 0 #0f0;
+    }
+
+    .container {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      width: 80%;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .play-btn {
+      background-color: #ffd966;
+      color: #5a0000;
+      padding: 12px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 100%;
+      box-shadow: 2px 2px 5px #aa4400;
+      transition: all 0.3s ease;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.05);
+      background-color: #ffeb99;
+    }
+
+    .login-links {
+      margin-top: 15px;
+      font-size: 14px;
+      color: white;
+    }
+
+    .social-login {
+      margin-top: 15px;
+    }
+
+    .social-login img {
+      width: 36px;
+      height: 36px;
+      margin: 0 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .social-login img:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+
+    <div class="logo">Pop<br><span style="color: limegreen">Match</span></div>
+
+    <div class="container">
+      <a href="Menu.html"><button class="play-btn">PLAY</button></a>
+      <a href="Settings.html"><button class="play-btn">SETTINGS</button></a>
+      <a href="CardCatalog.html"><button class="play-btn">CARD CATALOG</button></a>
+      <a href="About.html"><button class="play-btn">ABOUT</button></a>
+
+      <!-- Removed login and signup links -->
+      <div class="login-links">
+        Welcome back! Enjoy your time on Pop Match.
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Modes – Pop Match</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffffff, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    @media (min-width: 768px) {
+  .phone {
+    display: none;
+  }
+
+  .desktop-warning {
+    display: block;
+  }
+
+  body {
+    background: #fffae6;
+  }
+}
+
+/* Tweak .phone styling for true mobile look */
+.phone {
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: url('Lab 2.png') center/cover no-repeat;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+    .logo {
+      text-align: center;
+      font-size: 38px;
+      font-weight: bold;
+      color: #fff700;
+      text-shadow:
+        2px 2px #ff0000,
+        4px 4px #00ff00,
+        6px 6px #000000;
+      letter-spacing: 1px;
+      line-height: 1.2;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(45deg, #ff0, #ff5c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .container {
+      margin-top: 80px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 20px 15px;
+      width: 80%;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px; /* optional spacing between buttons */
+    }
+
+    .mode-btn {
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 100%;
+      color: white;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .mode-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .easy { background-color: #28a745; }       /* green */
+    .hard { background-color: #ff8800; }      /* orange */
+    .difficult { background-color: #e60000; } /* red */
+    .back { background-color: #007bff; }      /* blue */
+    .leaderboard { background-color: #ffd700; } /* gold */
+  </style>
+</head>
+<body>
+
+  <div class="phone">
+
+    <div class="logo">
+      Select<br><span style="color: limegreen; text-shadow: 2px 2px #004d00;">Game Mode</span>
+    </div>
+
+    <div class="container">
+      <a href="EasyMode.html"><button class="mode-btn easy">🟢 Easy Mode</button></a>
+      <a href="HardMode.html"><button class="mode-btn hard">🟠 Hard Mode</button></a>
+      <a href="DifficultMode.html"><button class="mode-btn difficult">🔴 Difficult Mode</button></a>
+      <a href="leaderboard-select.html"><button class="mode-btn leaderboard">🏆 Leaderboards</button></a>
+      <a href="landingpage.html"><button class="mode-btn back">🔙 Back</button></a>
+    </div>
+
+  </div>
+
+</body>
+</html>
