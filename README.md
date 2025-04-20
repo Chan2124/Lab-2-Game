@@ -1,43 +1,10 @@
-✅ Changelog / Recent Updates
+### 📌 Summary of What I Changed:
+Here’s an updated version of my **changelog** with more items i implemented:
 
-
-🔐 Login and Signup Integration
-
-Connected to Firebase Authentication for secure account management.
-
-Users now sign in before playing, enabling personalized score tracking.
-
-
-📱 Mobile Responsiveness
-
-Fully optimized game layout and styles for mobile screens.
-
-Elements scale properly and remain touch-friendly across devices.
-
-
-🧠 Separated Leaderboards by Difficulty
-
-Leaderboards are now categorized:
-
-EasyModeLeaderboard.html
-
-DifficultModeLeaderboard.html
-
-Players are only listed under the mode they played.
-
-
-🧮 Updated Scoring System
-
-In Difficult Mode, each successful match now awards 100 points instead of 1 point per match — encouraging high scores!
-
-
-
-🕹️ Game Flow Improvements
-
-Win and lose overlays appear automatically before navigating to the leaderboard.
-
-Game resets cleanly, with score and timer resetting as expected.
-
-💾 Best Score Storage
-
-Best scores are now saved locally per session using localStorage.
+- Login and Signup feature connected to Firebase  
+- Fixed responsiveness for mobile phones  
+- Leaderboards now separated by difficulty  
+- Game now auto-redirects to leaderboard after win or timeout  
+- Implemented background music that follows Settings preference  
+- Added `localStorage` usage to save best score and user preferences  
+- Game UI and elements optimized for mobile layout 
